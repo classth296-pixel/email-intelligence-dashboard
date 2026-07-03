@@ -10,7 +10,7 @@ import json
 import threading
 import time
 import traceback
-
+from datetime import timezone, timedelta
 import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
@@ -356,7 +356,8 @@ with tab1:
 
         # Show each email as expandable card
         for _, row in filtered.iterrows():
-            ts = row["timestamp"].strftime("%d %b %Y, %I:%M %p") if pd.notna(row["timestamp"]) else "Unknown"
+            IST = timezone(timedelta(hours=5, minutes=30))
+            ts = row["timestamp"].astimezone(IST).strftime("%d %b %Y, %I:%M %p IST") if pd.notna(row["timestamp"]) else "Unknown"
             with st.expander(f"📩 {row['subject']}  |  {row['sender_email']}  |  {ts}"):
                 col_l, col_r = st.columns([1, 1])
                 with col_l:
